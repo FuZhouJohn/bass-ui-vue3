@@ -1,17 +1,30 @@
 <template>
-  <button class="bass-button" :class="{[`theme-${theme}`]:theme}">
+  <button class="bass-button" :class="classes">
     <slot />
   </button>
 </template>
 
 <script lang='ts'>
+import { computed } from 'vue';
 export default {
   props: {
     theme: {
       type: String,
       default: "button",
     },
+    size: {
+      type: String,
+      default: "normal",
+    },
   },
+  setup(props){
+    const {theme,size} = props
+    const classes =  computed(()=>{
+      return {[`bass-theme-${theme}`]:theme,
+      [`bass-size-${size}`]:size}
+    })
+    return {classes}
+  }
 };
 </script>
 
@@ -48,6 +61,24 @@ $radius: 4px;
   }
   &::-moz-focus-inner {
     border: 0;
+  }
+  &.bass-theme-link {
+    border-color: transparent;
+    box-shadow: none;
+    color: $blue;
+    &:hover,
+    &:focus {
+      color: lighten($blue, 10%);
+    }
+  }
+  &.bass-theme-text {
+    border-color: transparent;
+    box-shadow: none;
+    color: inherit;
+    &:hover,
+    &:focus {
+      background: darken(white, 5%);
+    }
   }
 }
 </style>
