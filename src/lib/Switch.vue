@@ -1,5 +1,5 @@
 <template>
-  <button :class="{checked:value}" @click="toggle">
+  <button class='bass-switch' :class="{'bass-checked':value}" @click="toggle">
     <span></span>
   </button>
 </template>
@@ -18,10 +18,10 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 $h: 22px;
 $h2: $h - 4px;
-button {
+.bass-switch {
   height: $h;
   width: $h * 2;
   border: none;
@@ -38,7 +38,7 @@ button {
     border-radius: $h2 / 2;
     transition: all 250ms;
   }
-  &.checked {
+  &.bass-checked {
     background: #1890ff;
     > span {
       left: calc(100% - #{$h2} - 2px);
@@ -53,7 +53,7 @@ button {
       width: $h2 + 4px;
     }
   }
-  &.checked:active {
+  &.bass-checked:active {
     > span {
       width: $h2 + 4px;
       margin-left: -4px;
