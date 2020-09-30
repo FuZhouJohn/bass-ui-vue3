@@ -1,10 +1,12 @@
 <template>
-  <div>Dialog 示例</div>
+  <dialog></dialog>
 </template>
 
 <script>
+import dialog from '../lib/Dialog'
 export default {
-name: "DialogDemo"
+  name: "DialogDemo",
+  components: {dialog}
 }
 </script>
 
