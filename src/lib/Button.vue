@@ -1,6 +1,7 @@
 <template>
-  <button class="bass-button" :class="classes">
-    <slot />
+  <button class="bass-button" :class="classes" :disabled="disable">
+    <span v-if="loading" class="bass-loading-indicator"></span>
+    <slot/>
   </button>
 </template>
 
@@ -19,6 +20,14 @@ export default {
     level: {
       type: String,
       default: 'normal'
+    },
+    disable: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props){
@@ -41,7 +50,8 @@ $border-color: #d9d9d9;
 $color: #333;
 $blue: #40a9ff;
 $radius: 4px;
-$red:red;
+$red: red;
+$grey: grey;
 .bass-button {
   box-sizing: border-box;
   height: $h;
@@ -138,12 +148,53 @@ $red:red;
         color: darken($blue, 10%);
       }
     }
+
     &.bass-level-danger {
       color: $red;
+
       &:hover,
       &:focus {
         color: darken($red, 10%);
       }
+    }
+  }
+
+  &.bass-theme-button {
+    &[disabled] {
+      cursor: not-allowed;
+      color: $grey;
+
+      &:hover {
+        border-color: $grey;
+      }
+    }
+  }
+
+  &.bass-theme-link, &.bass-theme-text {
+    &[disabled] {
+      cursor: not-allowed;
+      color: grey;
+    }
+  }
+
+  > .bass-loading-indicator {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 4px;
+    border-radius: 8px;
+    border-color: $blue $blue $blue transparent;
+    border-style: solid;
+    border-width: 2px;
+    animation: bass-spin 1s infinite linear;
+  }
+
+  @keyframes bass-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
 }
