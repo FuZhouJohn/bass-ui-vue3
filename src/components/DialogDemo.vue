@@ -11,12 +11,15 @@
     <p>第一行文字12</p>
     <p>第二行文字123</p>
   </Dialog>
+  <h1>示例2</h1>
+  <Button @click="showDialog">指令式打开</Button>
 </template>
 
 <script lang="ts">
 import Button from "../lib/Button.vue";
 import Dialog from "../lib/Dialog.vue";
 import { ref } from "vue";
+import { openDialog } from "../lib/openDialog";
 export default {
   name: "DialogDemo",
   components: { Dialog, Button },
@@ -26,11 +29,14 @@ export default {
       x.value = !x.value;
     };
     const beforeConfirm = () => {
-      return false
+      return false;
     };
-    const beforeCancel = () => {
+    const beforeCancel = () => {};
+
+    const showDialog = () => {
+      openDialog({title:'提示',content:'<p>123</p>'})
     };
-    return { x, toggle, beforeConfirm, beforeCancel };
+    return { x, toggle, beforeConfirm, beforeCancel, showDialog };
   },
 };
 </script>
