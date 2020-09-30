@@ -1,33 +1,76 @@
 <template>
   <template v-if="visible">
-    <div class="bass-dialog-overlay"></div>
-    <div class="bass-dialog-wrapper">
-      <div class="bass-dialog">
-        <header>标题<span class="bass-dialog-close"></span></header>
-        <main>
-          <p>第一行</p>
-          <p>第二行</p>
-        </main>
-        <footer>
-          <Button>Ok</Button>
-          <Button>Cancel</Button>
-        </footer>
+    <teleport to='body'>
+      <div class="bass-dialog-overlay" @click="onClickOverlay"></div>
+      <div class="bass-dialog-wrapper">
+        <div class="bass-dialog">
+          <header>
+            {{ title }}<span class="bass-dialog-close" @click="close"></span>
+          </header>
+          <main>
+            <slot />
+          </main>
+          <footer>
+            <Button level="main" @click="confirm">Confirm</Button>
+            <Button @click="cancel">Cancel</Button>
+          </footer>
+        </div>
       </div>
-    </div>
+    </teleport>
   </template>
 </template>
 <script lang="ts">
 import Button from "./Button.vue";
 
 export default {
-  components: {Button},
+  components: { Button },
   props: {
     visible: {
       type: Boolean,
-      default: false
-    }
-  }
-}
+      default: false,
+    },
+    closeOnClickOverlay: {
+      type: Boolean,
+      default: true,
+    },
+    beforeConfirm: {
+      type: Function,
+    },
+    beforeCancel: {
+      type: Function,
+    },
+    title: {
+      type: String,
+      default: "提示",
+    },
+  },
+  setup(props, context) {
+    const close = () => {
+      context.emit("update:visible", false);
+    };
+    const onClickOverlay = () => {
+      if (props.closeOnClickOverlay) {
+        close();
+      }
+    };
+    const confirm = () => {
+      if (props.beforeConfirm?.() !== false) {
+        close();
+      }
+    };
+    const cancel = () => {
+      context.emit("cancel");
+      close();
+    };
+
+    return {
+      close,
+      onClickOverlay,
+      confirm,
+      cancel,
+    };
+  },
+};
 </script>
 <style lang="scss">
 $radius: 4px;
@@ -84,8 +127,9 @@ $border-color: #d9d9d9;
     height: 16px;
     cursor: pointer;
 
-    &::before, &::after {
-      content: '';
+    &::before,
+    &::after {
+      content: "";
       position: absolute;
       height: 1px;
       background: black;
